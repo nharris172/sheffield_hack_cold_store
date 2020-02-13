@@ -1,0 +1,19 @@
+version: "2"
+services:
+  cold_store_db:
+    build: ./cold_store_db/
+    ports:
+      - 54322:5432
+    volumes:
+    - ./pg_data:/var/lib/postgresql/data/pgdata
+    environment:
+      # user : postgres
+      POSTGRES_PASSWORD: "your_password"
+      POSTGRES_DB: cold_store_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+  consumer:
+     build: ./consumer/
+     links:
+       - cold_store_db
+     volumes:
+     - ./csv_data:/obs_data/
